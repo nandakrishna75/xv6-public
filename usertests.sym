@@ -12,11 +12,11 @@
 00000000 .debug_loc
 00000000 .debug_ranges
 00000000 usertests.c
-00005dc0 args.1471
+00005dc0 args.1473
 00000000 ulib.c
 00000000 printf.c
 00003950 printint
-000054b0 digits.1107
+000054b0 digits.1109
 00000000 umalloc.c
 00005e40 freep
 00005e44 base
@@ -95,6 +95,7 @@
 000038e2 open
 00003730 strchr
 000017a0 concreate
+00003942 cps
 00002680 fourteen
 00003140 validateint
 00001000 fourfiles
