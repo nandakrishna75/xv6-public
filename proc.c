@@ -88,6 +88,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->priority = 10;
 
   release(&ptable.lock);
 
@@ -322,19 +323,32 @@ wait(void)
 void
 scheduler(void)
 {
-  struct proc *p;
+  struct proc *p,*p1;
   struct cpu *c = mycpu();
+  int max_pr;
   c->proc = 0;
   
+
   for(;;){
     // Enable interrupts on this processor.
     sti();
 
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    
+    struct proc *chosen;
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+	  chosen = p;
+	  for(p1 = ptable.proc; p1 < &ptable.proc[NPROC]; p1++){
+	    if(p->priority < max_pr){
+		  max_pr = p->priority;
+		  chosen = p;
+		}
+	  }
+	
+	  p = chosen;
 
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
@@ -553,4 +567,27 @@ cps(void)
     i++;
   }
   return i;
+}
+
+int
+chpr(int pid, int priority)
+{
+  struct proc *p;
+
+  if(pid < 0 || (priority > 20 || priority < 0))
+    return -1;
+
+  acquire(&ptable.lock);
+
+  //fill
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->pid == pid){
+      p->priority = priority;
+      break;
+    }
+  }
+
+  release(&ptable.lock);
+
+  return pid;
 }

@@ -27,8 +27,8 @@ main(int argc, char *argv[])
       
       for(y=0; y<400.0; y+=0.1) {
         printf(1, ".");
-        for(x=0; x<40000.0; x+=0.1) {
-          z+= x;
+        for(x=0; x<400000000.0; x+=0.1) {
+          z+= x * 3.14 * 1.258;
 	  // while(z>0) z--;
         }
       }
